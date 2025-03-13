@@ -1,0 +1,31 @@
+name: Provision an S3 bucket in which backend state files can be stored
+
+on:
+  workflow_dispatch:
+
+jobs:
+  provision-s3:
+    name: Provision S3 bucket
+    permissions:
+    #   contents: write
+      id-token: write
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Configure credentials
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.ACCOUNT_ID}}:role/IaC
+          aws-region: eu-west-2
+      - name: Create the bucket
+        run: |
+          aws s3api create-bucket --bucket tf-state-bucket-${{secrets.ACCOUNT_ID}} --region eu-west-2 --create-bucket-configuration LocationConstraint=eu-west-2
+          aws s3api put-bucket-versioning --bucket tf-state-bucket-${{secrets.ACCOUNT_ID}} --versioning-configuration Status=Enabled
+      - name: Create corresponding DynamoDB entry
+        run: | 
+          aws dynamodb create-table \
+            --table-name terraform-lock \
+            --attribute-definitions AttributeName=LockID,AttributeType=S \
+            --key-schema AttributeName=LockID,KeyType=HASH \
+            --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+
+         
