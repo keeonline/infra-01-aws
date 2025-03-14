@@ -7,5 +7,4 @@
 
 ## Provision the S3 bucket so that it can store backend state files
 
-1. In GitHub, execut the action `Provision an S3 bucket for backend state file storage`
-
+1. In GitHub, execute the action `Provision an S3 bucket for backend state file storage`
