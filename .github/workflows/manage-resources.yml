@@ -1,4 +1,4 @@
-name: Manage resources with IaC
+name: Manage resources
 
 on:
   workflow_dispatch:
@@ -44,3 +44,11 @@ jobs:
             -backend-config="key=infra-01-aws" \
             -backend-config="region=eu-west-2" \
             -backend-config="dynamodb_table=terraform-lock" \
+      - name: Set plan mode
+        id: planmode
+        if: ${{contains(inputs.action,'destroy')}}
+        run: echo "value=destroy" >> $GITHUB_OUTPUT
+      - name: Terraform plan
+        run: | 
+          terraform plan -input=false ${{steps.planmode.outputs.value}}
+    
