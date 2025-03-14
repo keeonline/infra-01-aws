@@ -41,7 +41,7 @@ jobs:
         run: | 
           terraform init \
             -backend-config="bucket=tf-state-bucket-${{secrets.ACCOUNT_ID}}" \
-            -backend-config="key=infra-01-aws" \
+            -backend-config="key=infra-01-aws.tfstate" \
             -backend-config="region=eu-west-2" \
             -backend-config="dynamodb_table=terraform-lock" \
       - name: Set plan mode
