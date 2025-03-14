@@ -1,0 +1,46 @@
+name: Manage resources with IaC
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: Terraform action
+        required: true
+        options:
+          - apply-plan
+          - apply
+          - destroy-plan
+          - destroy
+        default: apply-plan
+
+
+jobs:
+  execute:
+    name: Manage resources
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout/@v4
+        with:
+          fetch-depth: 0
+      - name: Configure credentials
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.ACCOUNT_ID}}:role/IaC
+          aws-region: eu-west-2
+      - name: Install Terraform on runner
+        uses: hashicorp/setup-terraform@v3.1.2
+      - name: Terraform init
+        run: | 
+          terraform init \
+            -backend-config="bucket=tf-state-bucket-${{secrets.ACCOUNT_ID}}" \
+            -backend-config="key=infra-01-aws" \
+            -backend-config="region=eu-west-2" \
+            -backend-config="dynamodb_table=terraform-lock" \
