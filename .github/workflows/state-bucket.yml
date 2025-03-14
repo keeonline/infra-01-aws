@@ -1,4 +1,4 @@
-name: Provision an S3 bucket in which backend state files can be stored
+name: Provision an S3 bucket for backend state file storage
 
 on:
   workflow_dispatch:
