@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "igw" {
 data "aws_availability_zones" "available" {}
 
 locals {
-    az_zone_count = length(data.aws_availability_zones.names)
+    az_zone_count = length(data.aws_availability_zones.available.names)
 }
 
 # resource "aws_subnet" "public" {
