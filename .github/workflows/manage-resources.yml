@@ -53,7 +53,7 @@ jobs:
       - name: Conditionally set the planning mode to destroy
         id: planmode
         if: ${{contains(inputs.action,'destroy')}}
-        run: echo "value=destroy" >> $GITHUB_OUTPUT
+        run: echo "value=-destroy" >> $GITHUB_OUTPUT
       - name: Terraform plan
         run: | 
           terraform plan -input=false ${{steps.planmode.outputs.value}}
