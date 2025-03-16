@@ -44,7 +44,7 @@ jobs:
             -backend-config="key=infra-01-aws.tfstate" \
             -backend-config="region=eu-west-2" \
             -backend-config="dynamodb_table=terraform-lock" \
-      - name: Set plan mode
+      - name: Set the planning mode
         id: planmode
         if: ${{contains(inputs.action,'destroy')}}
         run: echo "value=destroy" >> $GITHUB_OUTPUT
