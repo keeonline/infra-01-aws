@@ -1,6 +1,7 @@
 resource "aws_lb" "alb" {
   name = "${var.environment}-alb"
   internal = false
+  load_balancer_type = "application"
   subnets = [for subnet in aws_subnet.public : subnet.id]
 
   tags = {

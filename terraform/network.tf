@@ -51,7 +51,7 @@ resource "aws_subnet" "private" {
 
 
 # Routing tables to route traffic for Public Subnet
-resource "aws_route_table" "public" {
+resource "aws_route_table" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
@@ -60,9 +60,14 @@ resource "aws_route_table" "public" {
   }
 }
 
-# Route table associations for both Public subnet
+resource "aws_main_route_table_association" "main" {
+  vpc_id         = aws_vpc.main.id
+  route_table_id = aws_route_table.main.id
+}
+
+# Route table associations for Public subnets
 resource "aws_route_table_association" "public" {
   count          = length(aws_subnet.public)
   subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.public.id
+  route_table_id = aws_route_table.main.id
 }
