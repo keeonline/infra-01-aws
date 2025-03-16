@@ -1,8 +1,33 @@
+resource "aws_security_group" "alb" {
+  name        = "${var.environment}-sg-alb"
+  description = "ALB security group"
+  vpc_id      = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.environment}-sg-alb"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 18080
+  ip_protocol       = "tcp"
+  to_port           = 18080
+
+  tags = {
+    Name = "${var.environment}-sg-alb"
+    Environment = "${var.environment}"
+  }
+}
+
 resource "aws_lb" "alb" {
   name = "${var.environment}-alb"
   internal = false
   load_balancer_type = "application"
   subnets = [for subnet in aws_subnet.public : subnet.id]
+  security_groups = [aws_security_group.alb.id]
 
   tags = {
     Name = "${var.environment}-alb"
