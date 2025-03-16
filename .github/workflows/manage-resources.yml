@@ -13,7 +13,11 @@ on:
           - destroy-plan
           - destroy
         default: apply-plan
-
+      environment:
+        type: environment
+        description: The GitHub environment targeted for resource management
+        required: false
+        default: test
 
 jobs:
   execute:
@@ -22,6 +26,8 @@ jobs:
       contents: write
       id-token: write
     runs-on: ubuntu-24.04
+    env:
+      TF_VAR_environment: ${{inputs.environment}}
     defaults:
       run:
         working-directory: terraform

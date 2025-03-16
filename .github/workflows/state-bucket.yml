@@ -7,7 +7,6 @@ jobs:
   provision-s3:
     name: Provision S3 bucket
     permissions:
-    #   contents: write
       id-token: write
     runs-on: ubuntu-24.04
     steps:
