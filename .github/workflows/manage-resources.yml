@@ -33,16 +33,16 @@ jobs:
       - name: Configure credentials
         uses: aws-actions/configure-aws-credentials/@v4
         with:
-          role-to-assume: arn:aws:iam::${{secrets.ACCOUNT_ID}}:role/IaC
-          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
       - name: Install Terraform on runner
         uses: hashicorp/setup-terraform@v3.1.2
       - name: Terraform init
         run: | 
           terraform init \
-            -backend-config="bucket=tf-state-bucket-${{secrets.ACCOUNT_ID}}" \
-            -backend-config="key=infra-01-aws.tfstate" \
-            -backend-config="region=eu-west-2" \
+            -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
+            -backend-config="key=${{github.event.repository.name}}.tfstate" \
+            -backend-config="region=${{secrets.AWS_REGION}}" \
             -backend-config="dynamodb_table=terraform-lock" \
       - name: Set the planning mode
         id: planmode

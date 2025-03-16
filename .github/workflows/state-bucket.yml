@@ -14,12 +14,12 @@ jobs:
       - name: Configure credentials
         uses: aws-actions/configure-aws-credentials/@v4
         with:
-          role-to-assume: arn:aws:iam::${{secrets.ACCOUNT_ID}}:role/IaC
-          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
       - name: Create the bucket
         run: |
-          aws s3api create-bucket --bucket tf-state-bucket-${{secrets.ACCOUNT_ID}} --region eu-west-2 --create-bucket-configuration LocationConstraint=eu-west-2
-          aws s3api put-bucket-versioning --bucket tf-state-bucket-${{secrets.ACCOUNT_ID}} --versioning-configuration Status=Enabled
+          aws s3api create-bucket --bucket tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}} --region ${{secrets.AWS_REGION}} --create-bucket-configuration LocationConstraint=${{secrets.AWS_REGION}}
+          aws s3api put-bucket-versioning --bucket tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}} --versioning-configuration Status=Enabled
       - name: Create corresponding DynamoDB entry
         run: | 
           aws dynamodb create-table \
