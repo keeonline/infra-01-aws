@@ -1,4 +1,4 @@
 resource "aws_lb" "alb" {
-  name = "${var.environment}-alb"
-  subnets = [aws_subnet.public.id]
+  name_prefix = "${var.environment}"
+  subnets = [for subnet in aws_subnet.public : subnet.id]
 }
