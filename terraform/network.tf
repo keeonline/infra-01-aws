@@ -36,6 +36,10 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.${count.index}.0/24"
   availability_zone  = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    Name = "${var.environment}-subnet-public-${count.index}"
+  }
 }
 
 # Create private subnets.
@@ -44,6 +48,10 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.${count.index+az_zone_count}.0/24"
   availability_zone  = data.aws_availability_zones.available.names[count.index]
+
+  tags = {
+    Name = "${var.environment}-subnet-private-${count.index}"
+  }
 }
 
 # resource "aws_subnet" "private" {
