@@ -58,6 +58,7 @@ jobs:
         run: | 
           terraform plan -input=false ${{steps.planmode.outputs.value}}
       - name: Terraform state change
+        if: ${{!endsWith(inputs.action,'-plan')}}
         run: | 
           terraform apply -auto-approve -input=false ${{steps.planmode.outputs.value}}
       
