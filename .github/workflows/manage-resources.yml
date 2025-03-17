@@ -1,4 +1,4 @@
-name: Manage resources (${{inputs.action}})
+name: Manage resources
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ on:
 
 jobs:
   execute:
-    name: Manage resources
+    name: Manage resources ${{inputs.action}}
     permissions:
       contents: write
       id-token: write
