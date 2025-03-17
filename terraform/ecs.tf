@@ -11,7 +11,7 @@ resource "aws_ecs_cluster" "chameleon" {
 resource "aws_ecs_task_definition" "alpha" {
   family = "chameleon"
   requires_compatibilities = ["FARGATE"]
-  cpu       = 10
+  cpu       = 256
   memory    = 512
   container_definitions = jsonencode([
     {
@@ -44,7 +44,7 @@ resource "aws_ecs_service" "alpha" {
 resource "aws_ecs_task_definition" "bravo" {
   family = "chameleon"
   requires_compatibilities = ["FARGATE"]
-  cpu       = 10
+  cpu       = 256
   memory    = 512
   container_definitions = jsonencode([
     {
