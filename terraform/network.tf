@@ -13,14 +13,14 @@ data "aws_vpc" "default" {
   default = true
 }
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id = data.aws_vpc.default.id
+# resource "aws_internet_gateway" "igw" {
+#   vpc_id = data.aws_vpc.default.id
 
-  tags = {
-    Name = "${var.environment}-igw"
-    Environment = "${var.environment}"
-  }
-}
+#   tags = {
+#     Name = "${var.environment}-igw"
+#     Environment = "${var.environment}"
+#   }
+# }
 
 data "aws_availability_zones" "available" {}
 
@@ -31,7 +31,7 @@ locals {
 resource "aws_subnet" "public" {
   count             = local.az_zone_count
   vpc_id            = data.aws_vpc.default.id
-  cidr_block        = cidrsubnet(data.aws_vpc.default.cidr_block,8,48+(16*count.index))
+  cidr_block        = cidrsubnet(data.aws_vpc.default.cidr_block,8,(48+(16*count.index)))
   availability_zone  = data.aws_availability_zones.available.names[count.index]
 
   tags = {
@@ -43,7 +43,7 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count             = local.az_zone_count
   vpc_id            = data.aws_vpc.default.id
-  cidr_block        = cidrsubnet(data.aws_vpc.default.cidr_block,8,96+(16*count.index))
+  cidr_block        = cidrsubnet(data.aws_vpc.default.cidr_block,8,(96+(16*count.index)))
   availability_zone  = data.aws_availability_zones.available.names[count.index]
 
   tags = {
@@ -54,31 +54,31 @@ resource "aws_subnet" "private" {
 
 
 
-# Routing tables to route traffic for Public Subnet
-resource "aws_route_table" "main" {
-  vpc_id = data.aws_vpc.default.id
+# # Routing tables to route traffic for Public Subnet
+# resource "aws_route_table" "main" {
+#   vpc_id = data.aws_vpc.default.id
 
-  tags = {
-    Name        = "${var.environment}-route-table-public"
-    Environment = "${var.environment}"
-  }
-}
+#   tags = {
+#     Name        = "${var.environment}-route-table-public"
+#     Environment = "${var.environment}"
+#   }
+# }
 
-# resource "aws_main_route_table_association" "main" {
-#   vpc_id         = data.aws_vpc.default.id
+# # resource "aws_main_route_table_association" "main" {
+# #   vpc_id         = data.aws_vpc.default.id
+# #   route_table_id = aws_route_table.main.id
+# # }
+
+# # Route table associations for Public subnets
+# resource "aws_route_table_association" "public" {
+#   count          = length(aws_subnet.public)
+#   subnet_id      = aws_subnet.public[count.index].id
 #   route_table_id = aws_route_table.main.id
 # }
 
-# Route table associations for Public subnets
-resource "aws_route_table_association" "public" {
-  count          = length(aws_subnet.public)
-  subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.main.id
-}
-
-resource "aws_route" "igw" {
-  route_table_id            = aws_route_table.main.id
-  destination_cidr_block    = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.igw.id
-}
+# resource "aws_route" "igw" {
+#   route_table_id            = aws_route_table.main.id
+#   destination_cidr_block    = "0.0.0.0/0"
+#   gateway_id = aws_internet_gateway.igw.id
+# }
 
