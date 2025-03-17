@@ -9,14 +9,16 @@ resource "aws_ecs_cluster" "chameleon" {
 }
 
 resource "aws_ecs_task_definition" "alpha" {
-  family = "service"
+  family = "chameleon"
+  requires_compatibilities = ["FARGATE"]
+  network_mode = "awsvpc"
+  cpu       = 10
+  memory    = 512
   container_definitions = jsonencode([
     {
       name      = "${var.environment}-taskdef-alpha"
       image     = "keeonline/chameleon:latest"
-      cpu       = 10
-      memory    = 512
-      "environment": [
+      environment = [
         {"name": "SERVICE_NAME", "value": "alpha"}
       ],
       essential = true
@@ -41,14 +43,16 @@ resource "aws_ecs_service" "alpha" {
 }
 
 resource "aws_ecs_task_definition" "bravo" {
-  family = "service"
+  family = "chameleon"
+  requires_compatibilities = ["FARGATE"]
+  network_mode = "awsvpc"
+  cpu       = 10
+  memory    = 512
   container_definitions = jsonencode([
     {
       name      = "${var.environment}-taskdef-bravo"
       image     = "keeonline/chameleon:latest"
-      cpu       = 10
-      memory    = 512
-      "environment": [
+      environment = [
         {"name": "SERVICE_NAME", "value": "bravo"}
       ],
       essential = true
