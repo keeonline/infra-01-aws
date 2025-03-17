@@ -10,6 +10,7 @@ resource "aws_ecs_cluster" "chameleon" {
 
 resource "aws_ecs_task_definition" "alpha" {
   family = "chameleon"
+  network_mode = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu       = 256
   memory    = 512
@@ -43,6 +44,7 @@ resource "aws_ecs_service" "alpha" {
 
 resource "aws_ecs_task_definition" "bravo" {
   family = "chameleon"
+  network_mode = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu       = 256
   memory    = 512
