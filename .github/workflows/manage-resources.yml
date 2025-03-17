@@ -1,4 +1,4 @@
-name: Manage resources
+name: Manage resources (${{inputs.action}})
 
 on:
   workflow_dispatch:
