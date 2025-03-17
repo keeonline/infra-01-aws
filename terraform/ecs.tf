@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "bravo" {
       portMappings = [
         {
           containerPort = 8080
-          hostPort      = 18080
+          hostPort      = 28080
         }
       ]
     }
