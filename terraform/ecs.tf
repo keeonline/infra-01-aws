@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "chameleon" {
   family = "service"
   container_definitions = jsonencode([
     {
-      name      = "chameleon"
+      name      = "${var.environment}-chameleon-taskdef"
       image     = "keeonline/chameleon:latest"
       cpu       = 10
       memory    = 512
@@ -25,4 +25,14 @@ resource "aws_ecs_task_definition" "chameleon" {
       ]
     }
   ])
+}
+
+resource "aws_ecs_service" "chameleon" {
+  name            = "${var.environment}-chameleon-service"
+  cluster         = aws_ecs_cluster.services.id
+  task_definition = aws_ecs_task_definition.chameleon.arn
+  desired_count   = 1
+#  iam_role        = aws_iam_role.foo.arn
+#  depends_on      = [aws_iam_role_policy.foo]
+
 }
