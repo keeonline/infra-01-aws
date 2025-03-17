@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "alpha" {
       portMappings = [
         {
           containerPort = 8080
-          hostPort      = 18080
+          hostPort      = 8080
         }
       ]
     }
@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "bravo" {
       portMappings = [
         {
           containerPort = 8080
-          hostPort      = 28080
+          hostPort      = 8080
         }
       ]
     }
