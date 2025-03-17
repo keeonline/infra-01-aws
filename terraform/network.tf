@@ -1,16 +1,20 @@
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_hostnames = true
-  enable_dns_support = true
+# resource "aws_vpc" "main" {
+#   cidr_block = "10.0.0.0/16"
+#   enable_dns_hostnames = true
+#   enable_dns_support = true
 
-  tags = {
-    Name = "${var.environment}-vpc"
-    Environment = "${var.environment}"
-  }
+#   tags = {
+#     Name = "${var.environment}-vpc"
+#     Environment = "${var.environment}"
+#   }
+# }
+
+data "aws_vpc" "default" {
+  default = true
 }
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = data.aws_vpc.default.id
 
   tags = {
     Name = "${var.environment}-igw"
@@ -26,7 +30,7 @@ locals {
 
 resource "aws_subnet" "public" {
   count             = local.az_zone_count
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = data.aws_vpc.default.id
   cidr_block        = "10.0.${count.index}.0/24"
   availability_zone  = data.aws_availability_zones.available.names[count.index]
 
@@ -38,7 +42,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_subnet" "private" {
   count             = local.az_zone_count
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = data.aws_vpc.default.id
   cidr_block        = "10.0.${count.index+local.az_zone_count}.0/24"
   availability_zone  = data.aws_availability_zones.available.names[count.index]
 
@@ -52,7 +56,7 @@ resource "aws_subnet" "private" {
 
 # Routing tables to route traffic for Public Subnet
 resource "aws_route_table" "main" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = data.aws_vpc.default.id
 
   tags = {
     Name        = "${var.environment}-route-table-public"
@@ -61,7 +65,7 @@ resource "aws_route_table" "main" {
 }
 
 # resource "aws_main_route_table_association" "main" {
-#   vpc_id         = aws_vpc.main.id
+#   vpc_id         = data.aws_vpc.default.id
 #   route_table_id = aws_route_table.main.id
 # }
 
