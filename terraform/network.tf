@@ -31,7 +31,7 @@ locals {
 resource "aws_subnet" "public" {
   count             = local.az_zone_count
   vpc_id            = data.aws_vpc.default.id
-  cidr_block        = "10.0.${count.index}.0/24"
+  cidr_block        = cidrsubnet(data.vpc_aws.default.cidr_block,8,48+(16*count.index))
   availability_zone  = data.aws_availability_zones.available.names[count.index]
 
   tags = {
@@ -43,7 +43,7 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count             = local.az_zone_count
   vpc_id            = data.aws_vpc.default.id
-  cidr_block        = "10.0.${count.index+local.az_zone_count}.0/24"
+  cidr_block        = cidrsubnet(data.vpc_aws.default.cidr_block,8,96+(16*count.index))
   availability_zone  = data.aws_availability_zones.available.names[count.index]
 
   tags = {
