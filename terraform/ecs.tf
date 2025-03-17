@@ -14,6 +14,7 @@ resource "aws_ecs_task_definition" "alpha" {
   requires_compatibilities = ["FARGATE"]
   cpu       = 256
   memory    = 512
+
   container_definitions = jsonencode([
     {
       name      = "${var.environment}-taskdef-alpha"
@@ -30,6 +31,11 @@ resource "aws_ecs_task_definition" "alpha" {
       ]
     }
   ])
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
 }
 
 resource "aws_ecs_service" "alpha" {
@@ -64,6 +70,11 @@ resource "aws_ecs_task_definition" "bravo" {
       ]
     }
   ])
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
 }
 
 resource "aws_ecs_service" "bravo" {
