@@ -53,7 +53,7 @@ resource "aws_ecs_task_definition" "bravo" {
   container_definitions = jsonencode([
     {
       name      = "${var.environment}-task-bravo"
-      image     = "keeonline/chameleon:latest"
+      image     = "docker.io/keeonline/chameleon:latest"
       environment = [
         {"name": "SERVICE_NAME", "value": "bravo"}
       ],
