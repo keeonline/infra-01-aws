@@ -16,16 +16,16 @@ resource "aws_lb_target_group" "bravo" {
   deregistration_delay = 5
   target_type          = "ip"
 
-  # health_check {
-  #   healthy_threshold   = 2
-  #   unhealthy_threshold = 2
-  #   interval            = 60
-  #   matcher             = var.healthcheck_matcher
-  #   path                = var.healthcheck_endpoint
-  #   port                = "traffic-port"
-  #   protocol            = "HTTP"
-  #   timeout             = 30
-  # }
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 10
+    matcher             = 200-299
+    path                = "/actuator/bravo/health"
+    port                = 9080
+    protocol            = "HTTP"
+    timeout             = 6
+  }
 }
 
 resource "aws_lb_listener_rule" "bravo" {
@@ -78,9 +78,17 @@ resource "aws_security_group" "chameleon" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description     = "Allow ingress traffic from ALB on HTTP only"
+    description     = "Allow application ingress traffic from ALB on HTTP only"
     from_port       = 8080
     to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description     = "Allow actuator ingress traffic from ALB on HTTP only"
+    from_port       = 9080
+    to_port         = 9080
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
   }
