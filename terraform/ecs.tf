@@ -37,7 +37,7 @@ resource "aws_lb_listener_rule" "bravo" {
   }
   condition {
     path_pattern {
-      values = ["/bravo*"]
+      values = ["/bravo/*"]
      }
    }
 }
