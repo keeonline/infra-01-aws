@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "chameleon" {
 
 }
 
-resource "aws_alb_target_group" "bravo" {
+resource "aws_lb_target_group" "bravo" {
   name                 = "${var.environment}-tg-bravo"
   port                 = 8080
   protocol             = "HTTP"
