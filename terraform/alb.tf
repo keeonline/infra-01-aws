@@ -35,7 +35,7 @@ resource "aws_lb" "alb" {
   }
 }
 
-resource "aws_lb_listener" "front_end" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "18080"
   protocol          = "HTTP"

@@ -28,6 +28,20 @@ resource "aws_alb_target_group" "bravo" {
   # }
 }
 
+resource "aws_lb_listener_rule" "bravo" {
+  listener_arn = "${aws_lb_listener.http.arn}"
+  priority     = 20
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.bravo.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/bravo*"]
+     }
+   }
+}
+
 resource "aws_ecs_task_definition" "bravo" {
   family = "${var.environment}-family-chameleon"
   network_mode = "awsvpc"
