@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "chameleon" {
 
 }
 
-resource "aws_lb_target_group" "bravo" {
+resource "aws_alb_target_group" "bravo" {
   name                 = "${var.environment}-tg-bravo"
   port                 = 8080
   protocol             = "HTTP"
@@ -33,7 +33,7 @@ resource "aws_lb_listener_rule" "bravo" {
   priority     = 20
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.bravo.arn
+    target_group_arn = aws_alb_target_group.bravo.arn
   }
   condition {
     path_pattern {
@@ -105,7 +105,7 @@ resource "aws_ecs_service" "bravo" {
 #  depends_on      = [aws_iam_role_policy.foo]
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.bravo.arn
+    target_group_arn = aws_alb_target_group.bravo.arn
     container_name   = "${var.environment}-task-bravo"
     container_port   = 8080
   }
