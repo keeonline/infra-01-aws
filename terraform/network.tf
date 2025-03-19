@@ -77,3 +77,25 @@ resource "aws_route" "igw" {
   destination_cidr_block    = "0.0.0.0/0"
   gateway_id = aws_internet_gateway.igw.id
 }
+
+
+
+
+resource "aws_eip" "ngw" {
+  domain = "vpc"
+}
+
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.nat_gateway.id
+  subnet_id = aws_subnet.nat_gateway.id
+  tags = {
+    "Name" = "${var.environment}-nat-gw"
+  }
+}
+
+resource "aws_route" "ngw" {
+  route_table_id            = aws_route_table.main.id
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.ngw.id
+}
+
