@@ -9,7 +9,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+resource "aws_vpc_security_group_ingress_rule" "alb" {
   security_group_id = aws_security_group.alb.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 18080
