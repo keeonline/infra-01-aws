@@ -136,9 +136,9 @@ resource "aws_ecs_service" "chameleon" {
     container_port   = 8080
   }
 
-    network_configuration {
-      security_groups  = [aws_security_group.chameleon.id]
-      subnets          = aws_subnet.private.*.id
-      assign_public_ip = false
-    }
+  network_configuration {
+    security_groups  = [aws_security_group.chameleon.id]
+    subnets          = aws_subnet.private.*.id
+    assign_public_ip = false
+  }
 }
