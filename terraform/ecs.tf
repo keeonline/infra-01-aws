@@ -21,7 +21,7 @@ resource "aws_lb_target_group" "bravo" {
     unhealthy_threshold = 2
     interval            = 10
     matcher             = "200-299"
-    path                = "/actuator/bravo/health"
+    path                = "/bravo/actuator/health"
     port                = 9080
     protocol            = "HTTP"
     timeout             = 6
