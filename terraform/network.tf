@@ -1,3 +1,5 @@
+data "aws_availability_zones" "available" {}
+
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   enable_dns_hostnames = true
@@ -7,12 +9,6 @@ resource "aws_vpc" "main" {
     Name = "${var.environment}-vpc"
     Environment = "${var.environment}"
   }
-}
-
-data "aws_availability_zones" "available" {}
-
-locals {
-    az_zone_count = length(data.aws_availability_zones.available.names)
 }
 
 # Create public and private subnets in the VPC
@@ -68,7 +64,7 @@ resource "aws_route_table" "public" {
   }
 }
 
-# Associate each of the public subnets to the public route table to allow internet traffic (TODO: to AND from them?????)
+# Associate each of the public subnets to the public route table to allow internet traffic
 
 resource "aws_route_table_association" "public" {
   count          = length(aws_subnet.public)
@@ -77,8 +73,9 @@ resource "aws_route_table_association" "public" {
 }
 
 # Create a NAT gateway in each public subnet so that internet access from private subnets can be configured (later)
+
 resource "aws_eip" "ngw" {
-  count = local.az_zone_count
+  count = length(aws_subnet.public)
   domain = "vpc"
 
   tags = {
@@ -121,8 +118,3 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
 }
-
-
-
-# NEXT - somehow associate the nat gateway with the IGW?????
-
