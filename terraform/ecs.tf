@@ -18,7 +18,7 @@ resource "aws_lb_target_group" "bravo" {
 
   health_check {
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3
     interval            = 10
     matcher             = "200-299"
     path                = "/bravo/actuator/health"
