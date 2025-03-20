@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "bravo" {
     interval            = 10
     matcher             = "200-299"
     path                = "/bravo/actuator/health"
-    port                = 9080
+    port                = 8080
     protocol            = "HTTP"
     timeout             = 6
   }
@@ -56,6 +56,7 @@ resource "aws_ecs_task_definition" "bravo" {
       image     = "docker.io/keeonline/chameleon:latest"
       environment = [
         {"name": "SERVICE_NAME", "value": "bravo"}
+        {"name": "NOT_USED", "value": "n/a"}
       ],
       cpu = 256
       memory = 512
