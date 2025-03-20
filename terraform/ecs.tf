@@ -58,8 +58,8 @@ resource "aws_ecs_task_definition" "chameleon" {
       #   {"name": "SERVICE_NAME", "value": "chameleon"},
       #   {"name": "NOT_USED", "value": "n/a"}
       # ]
-      cpu = 256
-      memory = 512
+      cpu = 1024
+      memory = 2048
       essential = true
       portMappings = [
         {
