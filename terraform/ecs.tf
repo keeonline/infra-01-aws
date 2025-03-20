@@ -19,12 +19,12 @@ resource "aws_lb_target_group" "chameleon" {
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 3
-    interval            = 10
+    interval            = 60
     matcher             = "200-299"
     path                = "/chameleon/actuator/health"
     port                = 8080
     protocol            = "HTTP"
-    timeout             = 6
+    timeout             = 30
   }
 }
 
