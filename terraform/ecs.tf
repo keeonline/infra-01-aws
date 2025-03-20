@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "bravo" {
       name      = "${var.environment}-task-bravo"
       image     = "docker.io/keeonline/chameleon:latest"
       environment = [
-        {"name": "SERVICE_NAME", "value": "bravo"}
+        {"name": "SERVICE_NAME", "value": "bravo"},
         {"name": "NOT_USED", "value": "n/a"}
       ],
       cpu = 256
