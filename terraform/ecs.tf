@@ -18,23 +18,30 @@ resource "aws_lb_target_group" "chameleon" {
 
   health_check {
     healthy_threshold   = 2
-    unhealthy_threshold = 3
-    interval            = 60
-    # matcher             = "200-299"
+    unhealthy_threshold = 2
+    interval            = 30
+    matcher             = "200"
     path                = "/chameleon/actuator/health"
-    # port                = 8080
+    port                = 9080
     protocol            = "HTTP"
-    # timeout             = 30
   }
 }
 
 #############  REALLY IMPORTANT !!!  Add an OUTBOUND SG rule to the ALB SECURITY GROUP so the ALB can access the service
 
-resource "aws_vpc_security_group_egress_rule" "alb_chameleon" {
+resource "aws_vpc_security_group_egress_rule" "alb_chameleon_service" {
   security_group_id = aws_security_group.alb.id
   cidr_ipv4         = aws_vpc.main.cidr_block
   from_port         = 8080
   to_port           = 8080
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "alb_chameleon_management" {
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = aws_vpc.main.cidr_block
+  from_port         = 9080
+  to_port           = 9080
   ip_protocol       = "tcp"
 }
 
