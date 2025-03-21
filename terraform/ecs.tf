@@ -126,12 +126,20 @@ resource "aws_security_group" "chameleon" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "chameleon" {
+resource "aws_vpc_security_group_ingress_rule" "chameleon_service" {
   security_group_id = aws_security_group.chameleon.id
   cidr_ipv4         = aws_vpc.main.cidr_block
   from_port         = 8080
   ip_protocol       = "tcp"
   to_port           = 8080
+}
+
+resource "aws_vpc_security_group_ingress_rule" "chameleon_management" {
+  security_group_id = aws_security_group.chameleon.id
+  cidr_ipv4         = aws_vpc.main.cidr_block
+  from_port         = 9080
+  ip_protocol       = "tcp"
+  to_port           = 9080
 }
 
 resource "aws_vpc_security_group_egress_rule" "chameleon" {
