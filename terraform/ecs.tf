@@ -25,6 +25,12 @@ resource "aws_lb_target_group" "chameleon" {
     port                = 9080
     protocol            = "HTTP"
   }
+
+  tags = {
+    Name = "${var.environment}-tg-chameleon"
+    Environment = "${var.environment}"
+  }
+
 }
 
 #############  REALLY IMPORTANT !!!  Add an OUTBOUND SG rule to the ALB SECURITY GROUP so the ALB can access the service
@@ -35,6 +41,11 @@ resource "aws_vpc_security_group_egress_rule" "alb_chameleon_service" {
   from_port         = 8080
   to_port           = 8080
   ip_protocol       = "tcp"
+
+  tags = {
+    Name = "${var.environment}-sg-rule-alb-chameleon-svc"
+    Environment = "${var.environment}"
+  }
 }
 
 resource "aws_vpc_security_group_egress_rule" "alb_chameleon_management" {
@@ -43,8 +54,12 @@ resource "aws_vpc_security_group_egress_rule" "alb_chameleon_management" {
   from_port         = 9080
   to_port           = 9080
   ip_protocol       = "tcp"
-}
 
+  tags = {
+    Name = "${var.environment}-sg-rule-alb-chameleon-mgmt"
+    Environment = "${var.environment}"
+  }
+}
 
 
 resource "aws_lb_listener_rule" "chameleon" {
