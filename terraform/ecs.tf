@@ -30,13 +30,13 @@ resource "aws_lb_target_group" "chameleon" {
 
 #############  REALLY IMPORTANT !!!  Add an OUTBOUND SG rule to the ALB SECURITY GROUP so the ALB can access the service
 
-# resource "aws_vpc_security_group_egress_rule" "alb_chameleon" {
-#   security_group_id = aws_security_group.alb.id
-#   cidr_ipv4         = aws_vpc.main.cidr_block
-#   from_port         = 8080
-#   to_port           = 8080
-#   ip_protocol       = "tcp"
-# }
+resource "aws_vpc_security_group_egress_rule" "alb_chameleon" {
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = aws_vpc.main.cidr_block
+  from_port         = 8080
+  to_port           = 8080
+  ip_protocol       = "tcp"
+}
 
 
 
