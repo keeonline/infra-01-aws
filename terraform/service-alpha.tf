@@ -56,7 +56,7 @@ resource "aws_lb_target_group" "alpha" {
 
 resource "aws_lb_listener_rule" "alpha" {
   listener_arn = aws_lb_listener.http.arn
-  priority     = 20
+  priority     = 10
 
   action {
     type             = "forward"
