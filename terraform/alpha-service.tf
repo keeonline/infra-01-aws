@@ -117,7 +117,7 @@ resource "aws_vpc_security_group_egress_rule" "alpha" {
 
 resource "aws_ecs_service" "alpha" {
   name            = "${var.environment}-ecs-service-alpha"
-  cluster         = aws_ecs_cluster.alpha.id
+  cluster         = aws_ecs_cluster.applications.id
   task_definition = aws_ecs_task_definition.alpha.arn
   desired_count   = 1
   launch_type = "FARGATE"
