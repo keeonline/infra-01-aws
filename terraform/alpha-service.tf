@@ -73,7 +73,7 @@ resource "aws_lb_listener_rule" "alpha" {
 
 resource "aws_security_group" "alpha" {
   name        = "${var.environment}-sg-alpha"
-  description = "Security group for 'alpha' ECS task running on Fargate"
+  description = "Security group for (alpha) ECS task running on Fargate"
   vpc_id      = aws_vpc.main.id
 
   tags = {
