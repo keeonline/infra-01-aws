@@ -9,7 +9,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "alb" {
+resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   security_group_id = aws_security_group.alb.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 18080
@@ -17,7 +17,33 @@ resource "aws_vpc_security_group_ingress_rule" "alb" {
   to_port           = 18080
 
   tags = {
-    Name = "${var.environment}-sg-alb"
+    Name = "${var.environment}-sg-alb-ingress-services"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = aws_vpc.main.cidr_block
+  from_port         = 8080
+  to_port           = 8080
+  ip_protocol       = "tcp"
+
+  tags = {
+    Name = "${var.environment}-sg-alb-egress-services"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = aws_vpc.main.cidr_block
+  from_port         = 9080
+  to_port           = 9080
+  ip_protocol       = "tcp"
+
+  tags = {
+    Name = "${var.environment}-sg-alb-egress-management"
     Environment = "${var.environment}"
   }
 }
