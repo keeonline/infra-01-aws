@@ -1,7 +1,14 @@
 data "aws_subnets" "public" {
   filter {
-    name   = "tag:Name"
-    values = ["${var.environment}-subnet-public-*"]
+    name   = "tag:Environment"
+    values = ["${var.environment}"]
+  }
+
+  filter {
+    # name   = "tag:Name"
+    # values = ["${var.environment}-subnet-public-*"]
+    name   = "tag:Public"
+    values = ["yes"]
   }
 }
 
