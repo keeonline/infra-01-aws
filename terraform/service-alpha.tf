@@ -72,70 +72,54 @@ resource "aws_lb_listener_rule" "alpha" {
   }
 }
 
-resource "aws_security_group" "alpha" {
-  name        = "${var.environment}-sg-alpha"
-  description = "Security group for (alpha) ECS task running on Fargate"
-  vpc_id      = aws_vpc.main.id
+# resource "aws_security_group" "alpha" {
+#   name        = "${var.environment}-sg-alpha"
+#   description = "Security group for (alpha) ECS task running on Fargate"
+#   vpc_id      = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.environment}-sg-alpha"
-  }
-}
+#   tags = {
+#     Name = "${var.environment}-sg-alpha"
+#   }
+# }
 
-data "aws_subnets" "public" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.environment}-subnet-public-*"]
-  }
-}
+# resource "aws_vpc_security_group_ingress_rule" "alpha_service" {
+#   count          = length(local.public_subnet_cidr_blocks)
+#   security_group_id = aws_security_group.alpha.id
+#   cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
+#   from_port         = 8080
+#   ip_protocol       = "tcp"
+#   to_port           = 8080
 
-data "aws_subnet" "public" {
-  for_each = toset(data.aws_subnets.public.ids)
-  id       = each.value
-}
+#   tags = {
+#     Name        = "${var.environment}-sg-ingress-rule-alpha-service-${count.index}"
+#     Environment = "${var.environment}"
+#   }
+# }
 
-locals {
-  public_subnet_cidr_blocks = [for s in data.aws_subnet.public : s.cidr_block]
-}
+# resource "aws_vpc_security_group_ingress_rule" "alpha_management" {
+#   count          = length(local.public_subnet_cidr_blocks)
+#   security_group_id = aws_security_group.alpha.id
+#   cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
+#   from_port         = 9080
+#   ip_protocol       = "tcp"
+#   to_port           = 9080
 
-resource "aws_vpc_security_group_ingress_rule" "alpha_service" {
-  count          = length(local.public_subnet_cidr_blocks)
-  security_group_id = aws_security_group.alpha.id
-  cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
-  # cidr_ipv4         = aws_vpc.main.cidr_block
-  from_port         = 8080
-  ip_protocol       = "tcp"
-  to_port           = 8080
+#   tags = {
+#     Name        = "${var.environment}-sg-ingress-rule-alpha-management-${count.index}"
+#     Environment = "${var.environment}"
+#   }
+# }
 
-  tags = {
-    Name        = "${var.environment}-sg-ingress-rule-alpha-service-${count.index}"
-    Environment = "${var.environment}"
-  }
-}
+# resource "aws_vpc_security_group_egress_rule" "alpha" {
+#   security_group_id = aws_security_group.alpha.id
+#   cidr_ipv4         = "0.0.0.0/0"
+#   ip_protocol       = "-1" # semantically equivalent to all ports
 
-resource "aws_vpc_security_group_ingress_rule" "alpha_management" {
-  security_group_id = aws_security_group.alpha.id
-  cidr_ipv4         = aws_vpc.main.cidr_block
-  from_port         = 9080
-  ip_protocol       = "tcp"
-  to_port           = 9080
-
-  tags = {
-    Name        = "${var.environment}-sg-ingress-rule-alpha-management"
-    Environment = "${var.environment}"
-  }
-}
-
-resource "aws_vpc_security_group_egress_rule" "alpha" {
-  security_group_id = aws_security_group.alpha.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" # semantically equivalent to all ports
-
-  tags = {
-    Name        = "${var.environment}-sg-egress-rule-alpha-management"
-    Environment = "${var.environment}"
-  }
-}
+#   tags = {
+#     Name        = "${var.environment}-sg-egress-rule-alpha-management"
+#     Environment = "${var.environment}"
+#   }
+# }
 
 resource "aws_ecs_service" "alpha" {
   name            = "${var.environment}-ecs-service-alpha"
@@ -151,7 +135,7 @@ resource "aws_ecs_service" "alpha" {
   }
 
   network_configuration {
-    security_groups  = [aws_security_group.alpha.id]
+    security_groups  = [aws_security_group.service.id]
     subnets          = aws_subnet.private.*.id
     assign_public_ip = false
   }
