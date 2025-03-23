@@ -82,17 +82,26 @@ resource "aws_security_group" "alpha" {
   }
 }
 
-data "aws_subnet" "public" {
+data "aws_subnets" "public" {
   filter {
     name   = "tag:Name"
     values = ["${var.environment}-subnet-public-*"]
   }
 }
 
+data "aws_subnet" "public" {
+  for_each = toset(data.aws_subnets.public.ids)
+  id       = each.value
+}
+
+locals {
+  public_subnet_cidr_blocks = [for s in data.aws_subnet.public : s.cidr_block]
+}
+
 resource "aws_vpc_security_group_ingress_rule" "alpha_service" {
-  count          = length(data.aws_subnet.public)
+  count          = length(local.public_subnet_cidr_blocks)
   security_group_id = aws_security_group.alpha.id
-  cidr_ipv4         = data.aws_subnet.public[count.index].cidr_block
+  cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
   # cidr_ipv4         = aws_vpc.main.cidr_block
   from_port         = 8080
   ip_protocol       = "tcp"
