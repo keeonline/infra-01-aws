@@ -40,7 +40,7 @@ resource "aws_vpc_security_group_ingress_rule" "service_traffic" {
 
 resource "aws_vpc_security_group_ingress_rule" "service_management" {
   count          = length(local.public_subnet_cidr_blocks)
-  security_group_id = aws_security_group.alpha.id
+  security_group_id = aws_security_group.service.id
   cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
   from_port         = 9080
   ip_protocol       = "tcp"
@@ -53,7 +53,7 @@ resource "aws_vpc_security_group_ingress_rule" "service_management" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "service" {
-  security_group_id = aws_security_group.alpha.id
+  security_group_id = aws_security_group.service.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 
