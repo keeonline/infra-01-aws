@@ -4,7 +4,7 @@ resource "aws_security_group" "alb" {
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name = "${var.environment}-sg-alb"
+    Name        = "${var.environment}-sg-alb"
     Environment = "${var.environment}"
   }
 }
@@ -17,7 +17,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   to_port           = 18080
 
   tags = {
-    Name = "${var.environment}-sg-alb-ingress-services"
+    Name        = "${var.environment}-sg-alb-ingress-services"
     Environment = "${var.environment}"
   }
 }
@@ -30,7 +30,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name = "${var.environment}-sg-alb-egress-services"
+    Name        = "${var.environment}-sg-alb-egress-services"
     Environment = "${var.environment}"
   }
 }
@@ -43,20 +43,20 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name = "${var.environment}-sg-alb-egress-management"
+    Name        = "${var.environment}-sg-alb-egress-management"
     Environment = "${var.environment}"
   }
 }
 
 resource "aws_lb" "alb" {
-  name = "${var.environment}-alb"
-  internal = false
+  name               = "${var.environment}-alb"
+  internal           = false
   load_balancer_type = "application"
-  subnets = [for subnet in aws_subnet.public : subnet.id]
-  security_groups = [aws_security_group.alb.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+  security_groups    = [aws_security_group.alb.id]
 
   tags = {
-    Name = "${var.environment}-alb"
+    Name        = "${var.environment}-alb"
     Environment = "${var.environment}"
   }
 }
@@ -77,7 +77,7 @@ resource "aws_lb_listener" "http" {
   }
 
   tags = {
-    Name = "${var.environment}-alb-listener"
+    Name        = "${var.environment}-alb-listener"
     Environment = "${var.environment}"
   }
 }
