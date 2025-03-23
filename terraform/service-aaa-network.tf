@@ -1,3 +1,8 @@
+data "aws_lb" "alb" {
+  name = "${var.environment}-alb"
+}
+
+
 data "aws_subnets" "public" {
   filter {
     name   = "tag:Environment"
@@ -10,6 +15,8 @@ data "aws_subnets" "public" {
     name   = "tag:Public"
     values = ["yes"]
   }
+
+  depends_on = [data.aws_lb.alb]
 }
 
 data "aws_subnet" "public" {
@@ -32,7 +39,7 @@ resource "aws_security_group" "service" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "service_traffic" {
-  count          = length(local.public_subnet_cidr_blocks)
+  count             = length(local.public_subnet_cidr_blocks)
   security_group_id = aws_security_group.service.id
   cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
   from_port         = 8080
@@ -46,7 +53,7 @@ resource "aws_vpc_security_group_ingress_rule" "service_traffic" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "service_management" {
-  count          = length(local.public_subnet_cidr_blocks)
+  count             = length(local.public_subnet_cidr_blocks)
   security_group_id = aws_security_group.service.id
   cidr_ipv4         = local.public_subnet_cidr_blocks[count.index]
   from_port         = 9080
