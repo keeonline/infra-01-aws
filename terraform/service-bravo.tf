@@ -73,53 +73,6 @@ resource "aws_lb_listener_rule" "bravo" {
   }
 }
 
-# resource "aws_security_group" "bravo" {
-#   name        = "${var.environment}-sg-bravo"
-#   description = "Security group for (bravo) ECS task running on Fargate"
-#   vpc_id      = aws_vpc.main.id
-
-#   tags = {
-#     Name = "${var.environment}-sg-bravo"
-#   }
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "bravo_service" {
-#   security_group_id = aws_security_group.bravo.id
-#   cidr_ipv4         = aws_vpc.main.cidr_block
-#   from_port         = 8080
-#   ip_protocol       = "tcp"
-#   to_port           = 8080
-
-#   tags = {
-#     Name        = "${var.environment}-sg-ingress-rule-bravo-service"
-#     Environment = "${var.environment}"
-#   }
-# }
-
-# resource "aws_vpc_security_group_ingress_rule" "bravo_management" {
-#   security_group_id = aws_security_group.bravo.id
-#   cidr_ipv4         = aws_vpc.main.cidr_block
-#   from_port         = 9080
-#   ip_protocol       = "tcp"
-#   to_port           = 9080
-
-#   tags = {
-#     Name        = "${var.environment}-sg-ingress-rule-bravo-management"
-#     Environment = "${var.environment}"
-#   }
-# }
-
-# resource "aws_vpc_security_group_egress_rule" "bravo" {
-#   security_group_id = aws_security_group.bravo.id
-#   cidr_ipv4         = "0.0.0.0/0"
-#   ip_protocol       = "-1" # semantically equivalent to all ports
-
-#   tags = {
-#     Name        = "${var.environment}-sg-ingress-rule-bravo-service"
-#     Environment = "${var.environment}"
-#   }
-# }
-
 resource "aws_ecs_service" "bravo" {
   name            = "${var.environment}-ecs-service-bravo"
   cluster         = aws_ecs_cluster.applications.id
