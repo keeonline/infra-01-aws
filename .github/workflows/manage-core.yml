@@ -1,4 +1,4 @@
-name: Manage resources
+name: Manage core infrastructure resources
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
         default: apply-plan
       environment:
         type: environment
-        description: The GitHub environment targeted for resource management
+        description: The targeted GitHub environment
         required: false
         default: test
 
@@ -30,19 +30,22 @@ jobs:
       TF_VAR_environment: ${{inputs.environment}}
     defaults:
       run:
-        working-directory: terraform
+        working-directory: terraform/core
     steps:
       - name: Clone the repository
         uses: actions/checkout/@v4
         with:
           fetch-depth: 0
+
       - name: Configure credentials
         uses: aws-actions/configure-aws-credentials/@v4
         with:
           role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
           aws-region: ${{secrets.AWS_REGION}}
+
       - name: Install Terraform on runner
         uses: hashicorp/setup-terraform@v3.1.2
+
       - name: Terraform init
         run: | 
           terraform init \
@@ -50,14 +53,17 @@ jobs:
             -backend-config="key=${{github.event.repository.name}}.tfstate" \
             -backend-config="region=${{secrets.AWS_REGION}}" \
             -backend-config="dynamodb_table=terraform-lock" \
+
       - name: Conditionally set the planning mode to destroy
         id: planmode
         if: ${{contains(inputs.action,'destroy')}}
         run: echo "value=-destroy" >> $GITHUB_OUTPUT
+
       - name: Terraform plan
         run: | 
           terraform plan -input=false ${{steps.planmode.outputs.value}}
       - name: Terraform state change
+
         if: ${{!endsWith(inputs.action,'-plan')}}
         run: | 
           terraform apply -auto-approve -input=false ${{steps.planmode.outputs.value}}
