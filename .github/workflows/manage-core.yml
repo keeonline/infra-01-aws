@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       TF_VAR_environment: ${{inputs.environment}}
-      TF_VAR_version: ${{github.ref_name}}
+      TF_VAR_iac_version: ${{github.ref_name}}
     defaults:
       run:
         working-directory: terraform/core
