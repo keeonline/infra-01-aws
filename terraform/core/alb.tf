@@ -11,20 +11,55 @@ resource "aws_security_group" "alb" {
   }
 }
 
+# Add ALB INGRESS rule so it can receive HTTP trafic over port 18080 from the internet
 resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   security_group_id = aws_security_group.alb.id
+  description       = "Ingress rule to allow inbound HTTP traffic to the service ALB"
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 18080
   ip_protocol       = "tcp"
   to_port           = 18080
 
   tags = {
-    Name        = "${var.environment}-sg-alb-ingress-services"
+    Name        = "${var.environment}-sg-rule-alb-public-http-ingress"
     Environment = "${var.environment}"
     Category    = "core"
     Version     = "${var.iac_version}"
   }
 }
+
+# Add ALB EGRESS rules to existing ALB so that it can talk to services in the private subnet
+resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
+  count             = length(aws_subnet.private)
+  description       = "Egress rule to allow outbound consumer request traffic to the services in the private subnet"
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = aws_subnet.private[count.index].cidr_block
+  from_port         = 8080
+  to_port           = 8080
+  ip_protocol       = "tcp"
+
+  tags = {
+    Name        = "${var.environment}-sg-alb-egress-services-${count.index}"
+    Environment = "${var.environment}"
+  }
+}
+
+resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
+  count             = length(aws_subnet.private)
+  description       = "Egress rule to allow outbound healthcheck traffic to the services in the private subnet"
+  security_group_id = aws_security_group.alb.id
+  cidr_ipv4         = aws_subnet.private[count.index].cidr_block
+  from_port         = 9080
+  to_port           = 9080
+  ip_protocol       = "tcp"
+
+  tags = {
+    Name        = "${var.environment}-sg-alb-egress-management-${count.index}"
+    Environment = "${var.environment}"
+  }
+}
+
+
 
 resource "aws_lb" "alb" {
   name               = "${var.environment}-alb"
@@ -41,7 +76,7 @@ resource "aws_lb" "alb" {
   }
 }
 
-resource "aws_lb_listener" "http" {
+resource "aws_lb_listener" "api_requests" {
   load_balancer_arn = aws_lb.alb.arn
   port              = "18080"
   protocol          = "HTTP"
@@ -57,7 +92,7 @@ resource "aws_lb_listener" "http" {
   }
 
   tags = {
-    Name        = "${var.environment}-alb-listener"
+    Name        = "${var.environment}-alb-listener-api-requests"
     Environment = "${var.environment}"
     Category    = "core"
     Version     = "${var.iac_version}"
