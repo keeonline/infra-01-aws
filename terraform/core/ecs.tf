@@ -4,7 +4,7 @@ resource "aws_ecs_cluster" "applications" {
   tags = {
     Name        = "${var.environment}-ecs-cluster-applications"
     Environment = "${var.environment}"
-    Category    = "infrastructure-core"
+    Category    = "core"
     Version     = "${var.iac_version}"
   }
 
