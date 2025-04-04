@@ -1,4 +1,4 @@
-name: Manage core infrastructure resources
+name: Manage resources
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
         default: apply-plan
       environment:
         type: environment
-        description: The targeted GitHub environment
+        description: The GitHub environment targeted for resource management
         required: false
         default: test
 
@@ -28,10 +28,9 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       TF_VAR_environment: ${{inputs.environment}}
-      TF_VAR_version: ${{github.ref_name}}
     defaults:
       run:
-        working-directory: terraform/core
+        working-directory: terraform
     steps:
       - name: Clone the repository
         uses: actions/checkout/@v4
@@ -46,6 +45,15 @@ jobs:
 
       - name: Install Terraform on runner
         uses: hashicorp/setup-terraform@v3.1.2
+
+      - name: Get Iac Version
+        id: iac_version
+        run: |
+          if [] then
+            echo "value=${{github.ref_name}}-latest" >> $GITHUB_OUTPUT
+          else
+
+          fi
 
       - name: Terraform init
         run: | 
@@ -63,8 +71,8 @@ jobs:
       - name: Terraform plan
         run: | 
           terraform plan -input=false ${{steps.planmode.outputs.value}}
-      - name: Terraform state change
 
+      - name: Terraform state change
         if: ${{!endsWith(inputs.action,'-plan')}}
         run: | 
           terraform apply -auto-approve -input=false ${{steps.planmode.outputs.value}}
