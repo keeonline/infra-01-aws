@@ -61,5 +61,6 @@ resource "aws_lb_listener" "http" {
     Environment = "${var.environment}"
     Category    = "infrastructure-core"
     Version     = "${var.iac_version}"
+    TestTag     = "abc"
   }
 }
