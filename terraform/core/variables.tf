@@ -2,6 +2,6 @@ variable "environment" {
   type = string
 }
 
-variable "version" {
+variable "iac_version" {
   type = string
 }

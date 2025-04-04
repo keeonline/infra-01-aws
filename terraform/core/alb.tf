@@ -7,7 +7,7 @@ resource "aws_security_group" "alb" {
     Name        = "${var.environment}-sg-alb"
     Environment = "${var.environment}"
     Category    = "infrastructure-core"
-    Version     = "${var.version}"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -22,7 +22,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
     Name        = "${var.environment}-sg-alb-ingress-services"
     Environment = "${var.environment}"
     Category    = "infrastructure-core"
-    Version     = "${var.version}"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_lb" "alb" {
     Name        = "${var.environment}-alb"
     Environment = "${var.environment}"
     Category    = "infrastructure-core"
-    Version     = "${var.version}"
+    Version     = "${var.iac_version}"
   }
 }
 
@@ -60,6 +60,6 @@ resource "aws_lb_listener" "http" {
     Name        = "${var.environment}-alb-listener"
     Environment = "${var.environment}"
     Category    = "infrastructure-core"
-    Version     = "${var.version}"
+    Version     = "${var.iac_version}"
   }
 }
