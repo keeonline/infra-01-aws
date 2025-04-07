@@ -1,4 +1,4 @@
-name: Manage core infrastructure resources
+name: Manage core infrastructure resources - SAVED
 
 on:
   workflow_dispatch:
