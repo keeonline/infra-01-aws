@@ -1,0 +1,68 @@
+name: Reusable workflow to manage core infrastructure resources
+
+on:
+  workflow_call:
+    inputs:
+      action:
+        type: string
+        description: Terraform action
+        required: true
+      environment:
+        type: string
+        description: The target environment
+        required: true
+      iac_version:
+        type: string
+        description: The IaC version for the environment
+        required: true
+      
+jobs:
+  execute:
+    name: Manage resources ${{inputs.action}}
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-24.04
+    env:
+      TF_VAR_environment: ${{inputs.environment}}
+      TF_VAR_iac_version: ${{inputs.iac_version}}
+    defaults:
+      run:
+        working-directory: terraform/core
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout/@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure credentials
+        uses: aws-actions/configure-aws-credentials/@v4
+        with:
+          role-to-assume: arn:aws:iam::${{secrets.AWS_ACCOUNT_ID}}:role/IaC
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Install Terraform on runner
+        uses: hashicorp/setup-terraform@v3.1.2
+
+      - name: Terraform init
+        run: | 
+          terraform init \
+            -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
+            -backend-config="key=${{inputs.environment}}-infra-01-aws.tfstate" \
+            -backend-config="region=${{secrets.AWS_REGION}}" \
+            -backend-config="dynamodb_table=terraform-lock" \
+
+      - name: Conditionally set the planning mode to destroy
+        id: planmode
+        if: ${{contains(inputs.action,'destroy')}}
+        run: echo "value=-destroy" >> $GITHUB_OUTPUT
+
+      - name: Terraform plan
+        run: | 
+          terraform plan -input=false ${{steps.planmode.outputs.value}}
+      - name: Terraform state change
+
+        if: ${{!endsWith(inputs.action,'-plan')}}
+        run: | 
+          terraform apply -auto-approve -input=false ${{steps.planmode.outputs.value}}
+      
