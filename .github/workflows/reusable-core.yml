@@ -23,9 +23,6 @@ jobs:
     env:
       TF_VAR_environment: ${{inputs.environment}}
       TF_VAR_iac_version: ${{inputs.iac_version}}
-    defaults:
-      run:
-        working-directory: terraform/core
     steps:
       - name: Clone the repository
         uses: actions/checkout/@v4
@@ -42,6 +39,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3.1.2
 
       - name: Terraform init
+        working-directory: terraform/core
         run: | 
           terraform init \
             -backend-config="bucket=tf-state-bucket-${{secrets.AWS_ACCOUNT_ID}}" \
@@ -55,10 +53,12 @@ jobs:
         run: echo "value=-destroy" >> $GITHUB_OUTPUT
 
       - name: Terraform plan
+        working-directory: terraform/core
         run: | 
           terraform plan -input=false ${{steps.planmode.outputs.value}}
-      - name: Terraform state change
 
+      - name: Terraform state change
+        working-directory: terraform/core
         if: ${{!endsWith(inputs.action,'-plan')}}
         run: | 
           terraform apply -auto-approve -input=false ${{steps.planmode.outputs.value}}
