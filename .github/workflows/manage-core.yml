@@ -28,3 +28,6 @@ jobs:
       environment: ${{inputs.environment}}
       iac_version: ${{github.ref_name}}
     secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
