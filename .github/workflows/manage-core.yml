@@ -22,7 +22,7 @@ on:
 jobs:
   call-reusable-workflow:
     name: Reuseable manage resources ${{inputs.action}}
-    uses: ./.github/workflows/reuseable-core.yml
+    uses: ./.github/workflows/reusable-core.yml
     with:
       action: ${{inputs.action}}
       environment: ${{inputs.environment}}
