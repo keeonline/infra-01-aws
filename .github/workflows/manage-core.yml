@@ -1,4 +1,4 @@
-name: Manage core infrastructure resources
+name: Manage cloud resources
 
 on:
   workflow_dispatch:
@@ -20,11 +20,14 @@ on:
         default: test
 
 jobs:
-  call-reusable-workflow:
-    name: Reuseable manage resources ${{inputs.action}}
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
+  manage-resources:
+    name: Manage resources
+    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@dev-reuse
     with:
       action: ${{inputs.action}}
+      repo_owner: ${{github.repository_owner}}
+      repo_name: ${{github.event.repository.name}}
+      work_dir: terraform/core
       environment: ${{inputs.environment}}
       iac_ref: ${{github.ref_name}}
     secrets: inherit
