@@ -1,4 +1,4 @@
-name: Manage cloud resources
+name: Manage infrastructure
 
 on:
   workflow_dispatch:
