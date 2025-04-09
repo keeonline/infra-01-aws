@@ -22,11 +22,11 @@ on:
 jobs:
   call-reusable-workflow:
     name: Reuseable manage resources ${{inputs.action}}
-    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.2
+    uses: keeonline/github-workflows/.github/workflows/reusable-core.yml@v0.0.3
     with:
       action: ${{inputs.action}}
       environment: ${{inputs.environment}}
-      iac_version: ${{github.ref_name}}
+      iac_ref: ${{github.ref_name}}
     secrets: inherit
     permissions:
       contents: write
