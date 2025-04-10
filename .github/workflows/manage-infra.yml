@@ -37,6 +37,5 @@ jobs:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
           action: ${{inputs.action}}
-          repo_name: infra-01-aws
           terraform_codedir: terraform/core
           environment: ${{inputs.environment}}
