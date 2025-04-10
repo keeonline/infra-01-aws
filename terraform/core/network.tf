@@ -8,7 +8,7 @@ resource "aws_vpc" "main" {
   tags = {
     Name        = "${var.environment}-vpc"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
   }
 }
@@ -24,7 +24,7 @@ resource "aws_subnet" "public" {
   tags = {
     Name        = "${var.environment}-subnet-public-${count.index}"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
     Public      = "yes"
   }
@@ -39,7 +39,7 @@ resource "aws_subnet" "private" {
   tags = {
     Name        = "${var.environment}-subnet-private-${count.index}"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
     Public      = "no"
   }
@@ -53,7 +53,7 @@ resource "aws_internet_gateway" "igw" {
   tags = {
     Name        = "${var.environment}-igw"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
   }
 }
@@ -71,7 +71,7 @@ resource "aws_route_table" "public" {
   tags = {
     Name        = "${var.environment}-rt-public"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
   }
 }
@@ -93,7 +93,7 @@ resource "aws_eip" "ngw" {
   tags = {
     Name        = "${var.environment}-eip-ngw-${count.index}"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
   }
 }
@@ -106,7 +106,7 @@ resource "aws_nat_gateway" "ngw" {
   tags = {
     Name        = "${var.environment}-ngw-${count.index}"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
   }
 }
@@ -125,7 +125,7 @@ resource "aws_route_table" "private" {
   tags = {
     Name        = "${var.environment}-rt-private-${count.index}"
     Environment = "${var.environment}"
-    Category    = "core"
+    Category    = "${resource_category}"
     Version     = "${var.iac_version}"
   }
 }
