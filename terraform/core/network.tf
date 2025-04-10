@@ -6,10 +6,10 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 
   tags = {
-    Name        = "${var.environment}-vpc"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-vpc"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -22,10 +22,10 @@ resource "aws_subnet" "public" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name        = "${var.environment}-subnet-public-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-subnet-public-${count.index}"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
     Public      = "yes"
   }
 }
@@ -37,10 +37,10 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name        = "${var.environment}-subnet-private-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-subnet-private-${count.index}"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
     Public      = "no"
   }
 }
@@ -51,10 +51,10 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "${var.environment}-igw"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-igw"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -69,10 +69,10 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name        = "${var.environment}-rt-public"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-rt-public"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -91,10 +91,10 @@ resource "aws_eip" "ngw" {
   domain = "vpc"
 
   tags = {
-    Name        = "${var.environment}-eip-ngw-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-eip-ngw-${count.index}"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -104,10 +104,10 @@ resource "aws_nat_gateway" "ngw" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name        = "${var.environment}-ngw-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-ngw-${count.index}"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -123,10 +123,10 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name        = "${var.environment}-rt-private-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-rt-private-${count.index}"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 

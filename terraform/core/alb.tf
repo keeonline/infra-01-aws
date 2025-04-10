@@ -1,13 +1,13 @@
 resource "aws_security_group" "alb" {
-  name        = "${var.environment}-sg-alb"
+  name        = "${var.infra_environment}-sg-alb"
   description = "ALB security group"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name        = "${var.environment}-sg-alb"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-sg-alb"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -21,10 +21,10 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   to_port           = 18080
 
   tags = {
-    Name        = "${var.environment}-sg-rule-alb-public-http-ingress"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -39,8 +39,8 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name        = "${var.environment}-sg-alb-egress-services-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
+    Environment = "${var.infra_environment}"
   }
 }
 
@@ -54,25 +54,25 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name        = "${var.environment}-sg-alb-egress-management-${count.index}"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
+    Environment = "${var.infra_environment}"
   }
 }
 
 
 
 resource "aws_lb" "alb" {
-  name               = "${var.environment}-alb"
+  name               = "${var.infra_environment}-alb"
   internal           = false
   load_balancer_type = "application"
   subnets            = [for subnet in aws_subnet.public : subnet.id]
   security_groups    = [aws_security_group.alb.id]
 
   tags = {
-    Name        = "${var.environment}-alb"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-alb"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -92,9 +92,9 @@ resource "aws_lb_listener" "api_requests" {
   }
 
   tags = {
-    Name        = "${var.environment}-alb-listener-api-requests"
-    Environment = "${var.environment}"
+    Name        = "${var.infra_environment}-alb-listener-api-requests"
+    Environment = "${var.infra_environment}"
     Category    = "${var.resource_category}"
-    Version     = "${var.iac_version}"
+    Version     = "${var.infra_version}"
   }
 }
