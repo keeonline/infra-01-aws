@@ -1,7 +1,12 @@
-variable "environment" {
+variable "infra_environment" {
   type = string
 }
 
-variable "iac_version" {
+variable "infra_version" {
   type = string
+}
+
+variable "resource_category" {
+  type = string
+  default = "infrastructure"
 }

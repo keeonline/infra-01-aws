@@ -10,14 +10,14 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "ecs_task_exec" {
-  name               = "${var.environment}-iam-role-ecs-task-exec"
+  name               = "${var.infra_environment}-iam-role-ecs-task-exec"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
   tags = {
-    Name        = "${var.environment}-iam-role-ecs-task-exec"
-    Environment = "${var.environment}"
-    Category    = "core"
-    Version     = "${var.iac_version}"
+    Name        = "${var.infra_environment}-iam-role-ecs-task-exec"
+    Environment = "${var.infra_environment}"
+    Category    = "${var.resource_category}"
+    Version     = "${var.infra_version}"
   }
 }
 
@@ -27,14 +27,14 @@ resource "aws_iam_role_policy_attachment" "ecs_task_exec" {
 }
 
 resource "aws_iam_role" "ecs_task" {
-  name               = "${var.environment}-iam-role-ecs-task"
+  name               = "${var.infra_environment}-iam-role-ecs-task"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 
   tags = {
-    Name        = "${var.environment}-iam-role-ecs-task"
-    Environment = "${var.environment}"
-    Category    = "core"
-    Version     = "${var.iac_version}"
+    Name        = "${var.infra_environment}-iam-role-ecs-task"
+    Environment = "${var.infra_environment}"
+    Category    = "${var.resource_category}"
+    Version     = "${var.infra_version}"
   }
 }
 
