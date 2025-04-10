@@ -22,15 +22,20 @@ on:
 jobs:
   manage-resources:
     name: Manage resources
-    uses: keeonline/github-workflows/.github/workflows/terraform-action.yml@v0.0.4
-    with:
-      action: ${{inputs.action}}
-      repo_owner: ${{github.repository_owner}}
-      repo_name: ${{github.event.repository.name}}
-      work_dir: terraform/core
-      environment: ${{inputs.environment}}
-      iac_ref: ${{github.ref_name}}
-    secrets: inherit
+    runs-on: ubuntu-24.04
+    environment: ${{inputs.environment}}
+    env:
+      TF_VAR_environment: ${{inputs.environment}}
+      TF_VAR_iac_version: v-carlos-fandango
+      TF_VAR_infra_environment: ${{vars.INFRA_ENVIRONMENT}}
     permissions:
       contents: write
       id-token: write
+    steps:
+      - name: terraform action
+        uses: keeonline/github-actions/show@main
+        with:
+          aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
+          action: ${{inputs.action}}
+          terraform_codedir: terraform/core
+          environment: ${{inputs.environment}}
