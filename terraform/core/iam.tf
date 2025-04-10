@@ -16,7 +16,7 @@ resource "aws_iam_role" "ecs_task_exec" {
   tags = {
     Name        = "${var.environment}-iam-role-ecs-task-exec"
     Environment = "${var.environment}"
-    Category    = "${resource_category}"
+    Category    = "${var.resource_category}"
     Version     = "${var.iac_version}"
   }
 }
@@ -33,7 +33,7 @@ resource "aws_iam_role" "ecs_task" {
   tags = {
     Name        = "${var.environment}-iam-role-ecs-task"
     Environment = "${var.environment}"
-    Category    = "${resource_category}"
+    Category    = "${var.resource_category}"
     Version     = "${var.iac_version}"
   }
 }
