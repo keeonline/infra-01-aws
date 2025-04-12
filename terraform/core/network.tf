@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
 
   tags = {
     Name        = "${var.infra_environment}-vpc"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
