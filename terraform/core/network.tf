@@ -6,8 +6,8 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 
   tags = {
-    Name        = "${var.infra_environment}-vpc"
-    # Created = "${timestamp()}"
+    Name    = "${var.infra_environment}-vpc"
+    Created = "${timestamp()}"
   }
 }
 
@@ -20,11 +20,8 @@ resource "aws_subnet" "public" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name        = "${var.infra_environment}-subnet-public-${count.index}"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-    Public      = "yes"
+    Name    = "${var.infra_environment}-subnet-public-${count.index}"
+    Created = "${timestamp()}"
   }
 }
 
@@ -35,11 +32,8 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name        = "${var.infra_environment}-subnet-private-${count.index}"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-    Public      = "no"
+    Name    = "${var.infra_environment}-subnet-private-${count.index}"
+    Created = "${timestamp()}"
   }
 }
 
