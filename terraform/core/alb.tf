@@ -5,9 +5,9 @@ resource "aws_security_group" "alb" {
 
   tags = {
     Name        = "${var.infra_environment}-sg-alb"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    # Environment = "${var.infra_environment}"
+    # Category    = "${var.resource_category}"
+    # Version     = "${var.infra_version}"
   }
 }
 
@@ -22,9 +22,9 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
 
   tags = {
     Name        = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    # Environment = "${var.infra_environment}"
+    # Category    = "${var.resource_category}"
+    # Version     = "${var.infra_version}"
   }
 }
 
@@ -40,7 +40,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
 
   tags = {
     Name        = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
-    Environment = "${var.infra_environment}"
+    # Environment = "${var.infra_environment}"
   }
 }
 
@@ -55,7 +55,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
 
   tags = {
     Name        = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
-    Environment = "${var.infra_environment}"
+    # Environment = "${var.infra_environment}"
   }
 }
 
@@ -70,9 +70,9 @@ resource "aws_lb" "alb" {
 
   tags = {
     Name        = "${var.infra_environment}-alb"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    # Environment = "${var.infra_environment}"
+    # Category    = "${var.resource_category}"
+    # Version     = "${var.infra_version}"
   }
 }
 
@@ -93,8 +93,8 @@ resource "aws_lb_listener" "api_requests" {
 
   tags = {
     Name        = "${var.infra_environment}-alb-listener-api-requests"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    # Environment = "${var.infra_environment}"
+    # Category    = "${var.resource_category}"
+    # Version     = "${var.infra_version}"
   }
 }
