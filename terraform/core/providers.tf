@@ -10,7 +10,8 @@ terraform {
 provider "aws" {
   default_tags {
     tags = {
-      Environment = "${var.infra_environment}"
+      # Environment = "${var.infra_environment}"
+      Environment = "bob"
       Category    = "${var.resource_category}"
       Version     = "${var.infra_version}"
     }
