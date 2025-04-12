@@ -15,4 +15,8 @@ provider "aws" {
       Version     = "${var.infra_version}"    
     }
   }
+
+  ignore_tags {
+    keys = ["Created"]
+  }
 }
