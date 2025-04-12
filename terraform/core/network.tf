@@ -7,9 +7,7 @@ resource "aws_vpc" "main" {
 
   tags = {
     Name        = "${var.infra_environment}-vpc"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    Created = "${timestamp()}"
   }
 }
 
@@ -47,93 +45,93 @@ resource "aws_subnet" "private" {
 
 # Create an internet gateway
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+# resource "aws_internet_gateway" "igw" {
+#   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name        = "${var.infra_environment}-igw"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-  }
-}
+#   tags = {
+#     Name        = "${var.infra_environment}-igw"
+#     Environment = "${var.infra_environment}"
+#     Category    = "${var.resource_category}"
+#     Version     = "${var.infra_version}"
+#   }
+# }
 
-# Create a route table and add a route for public internet access 
+# # Create a route table and add a route for public internet access 
 
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+# resource "aws_route_table" "public" {
+#   vpc_id = aws_vpc.main.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_internet_gateway.igw.id
+#   }
 
-  tags = {
-    Name        = "${var.infra_environment}-rt-public"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-  }
-}
+#   tags = {
+#     Name        = "${var.infra_environment}-rt-public"
+#     Environment = "${var.infra_environment}"
+#     Category    = "${var.resource_category}"
+#     Version     = "${var.infra_version}"
+#   }
+# }
 
-# Associate each of the public subnets to the public route table to allow internet traffic
+# # Associate each of the public subnets to the public route table to allow internet traffic
 
-resource "aws_route_table_association" "public" {
-  count          = length(aws_subnet.public)
-  subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.public.id
-}
+# resource "aws_route_table_association" "public" {
+#   count          = length(aws_subnet.public)
+#   subnet_id      = aws_subnet.public[count.index].id
+#   route_table_id = aws_route_table.public.id
+# }
 
-# Create a NAT gateway in each public subnet so that internet access from private subnets can be configured (later)
+# # Create a NAT gateway in each public subnet so that internet access from private subnets can be configured (later)
 
-resource "aws_eip" "ngw" {
-  count  = length(aws_subnet.public)
-  domain = "vpc"
+# resource "aws_eip" "ngw" {
+#   count  = length(aws_subnet.public)
+#   domain = "vpc"
 
-  tags = {
-    Name        = "${var.infra_environment}-eip-ngw-${count.index}"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-  }
-}
+#   tags = {
+#     Name        = "${var.infra_environment}-eip-ngw-${count.index}"
+#     Environment = "${var.infra_environment}"
+#     Category    = "${var.resource_category}"
+#     Version     = "${var.infra_version}"
+#   }
+# }
 
-resource "aws_nat_gateway" "ngw" {
-  count         = length(aws_subnet.public)
-  allocation_id = aws_eip.ngw[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id
+# resource "aws_nat_gateway" "ngw" {
+#   count         = length(aws_subnet.public)
+#   allocation_id = aws_eip.ngw[count.index].id
+#   subnet_id     = aws_subnet.public[count.index].id
 
-  tags = {
-    Name        = "${var.infra_environment}-ngw-${count.index}"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-  }
-}
+#   tags = {
+#     Name        = "${var.infra_environment}-ngw-${count.index}"
+#     Environment = "${var.infra_environment}"
+#     Category    = "${var.resource_category}"
+#     Version     = "${var.infra_version}"
+#   }
+# }
 
-# Create a route table for the each of the NAT gateways and add a route for internet traffic
+# # Create a route table for the each of the NAT gateways and add a route for internet traffic
 
-resource "aws_route_table" "private" {
-  count  = length(aws_subnet.private)
-  vpc_id = aws_vpc.main.id
+# resource "aws_route_table" "private" {
+#   count  = length(aws_subnet.private)
+#   vpc_id = aws_vpc.main.id
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.ngw[count.index].id
-  }
+#   route {
+#     cidr_block     = "0.0.0.0/0"
+#     nat_gateway_id = aws_nat_gateway.ngw[count.index].id
+#   }
 
-  tags = {
-    Name        = "${var.infra_environment}-rt-private-${count.index}"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
-  }
-}
+#   tags = {
+#     Name        = "${var.infra_environment}-rt-private-${count.index}"
+#     Environment = "${var.infra_environment}"
+#     Category    = "${var.resource_category}"
+#     Version     = "${var.infra_version}"
+#   }
+# }
 
-# Associate the private subnets with the route table for the NAT gateway in the same AZ
+# # Associate the private subnets with the route table for the NAT gateway in the same AZ
 
-resource "aws_route_table_association" "private" {
-  count          = length(aws_subnet.private)
-  subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private[count.index].id
-}
+# resource "aws_route_table_association" "private" {
+#   count          = length(aws_subnet.private)
+#   subnet_id      = aws_subnet.private[count.index].id
+#   route_table_id = aws_route_table.private[count.index].id
+# }
