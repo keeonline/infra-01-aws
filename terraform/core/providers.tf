@@ -10,10 +10,9 @@ terraform {
 provider "aws" {
   default_tags {
     tags = {
-      Created = "${timestamp()}"
       Environment = "${var.infra_environment}"
       Category    = "${var.resource_category}"
-      Version     = "${var.infra_version}"    
+      Version     = "${var.infra_version}"
     }
   }
 
