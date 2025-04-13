@@ -20,7 +20,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
 
   tags = {
     Name    = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -36,7 +36,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
 
   tags = {
     Name    = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
 
   tags = {
     Name    = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
