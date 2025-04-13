@@ -4,10 +4,8 @@ resource "aws_security_group" "alb" {
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name        = "${var.infra_environment}-sg-alb"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    Name    = "${var.infra_environment}-sg-alb"
+    Created = "${timestamp()}"
   }
 }
 
@@ -21,10 +19,8 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   to_port           = 18080
 
   tags = {
-    Name        = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    Name    = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
+    Created = "${timestamp()}"
   }
 }
 
@@ -39,8 +35,8 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name        = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
-    Environment = "${var.infra_environment}"
+    Name    = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
+    Created = "${timestamp()}"
   }
 }
 
@@ -54,8 +50,8 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name        = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
-    Environment = "${var.infra_environment}"
+    Name    = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
+    Created = "${timestamp()}"
   }
 }
 
@@ -69,10 +65,8 @@ resource "aws_lb" "alb" {
   security_groups    = [aws_security_group.alb.id]
 
   tags = {
-    Name        = "${var.infra_environment}-alb"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    Name    = "${var.infra_environment}-alb"
+    Created = "${timestamp()}"
   }
 }
 
@@ -92,9 +86,7 @@ resource "aws_lb_listener" "api_requests" {
   }
 
   tags = {
-    Name        = "${var.infra_environment}-alb-listener-api-requests"
-    Environment = "${var.infra_environment}"
-    Category    = "${var.resource_category}"
-    Version     = "${var.infra_version}"
+    Name    = "${var.infra_environment}-alb-listener-api-requests"
+    Created = "${timestamp()}"
   }
 }

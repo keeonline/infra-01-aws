@@ -7,4 +7,16 @@ terraform {
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  default_tags {
+    tags = {
+      Environment = "${var.infra_environment}"
+      Category    = "${var.resource_category}"
+      Version     = "${var.infra_version}"
+    }
+  }
+
+  ignore_tags {
+    keys = ["Created"]
+  }
+}
