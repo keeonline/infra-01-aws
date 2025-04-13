@@ -60,7 +60,7 @@ resource "aws_route_table" "public" {
 
   tags = {
     Name    = "${var.infra_environment}-rt-public"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -108,7 +108,7 @@ resource "aws_route_table" "private" {
 
   tags = {
     Name    = "${var.infra_environment}-rt-private-${count.index}"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
