@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Get the artefact version
         id: artefact_version
-        uses: keeonline/github-actions/artefact-version-by-ref_type@versions
+        uses: keeonline/github-actions/artefact-version-by-ref-type@versions
 
       - name: show
         run: |
