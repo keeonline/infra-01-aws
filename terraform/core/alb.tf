@@ -5,7 +5,7 @@ resource "aws_security_group" "alb" {
 
   tags = {
     Name    = "${var.infra_environment}-sg-alb"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -66,7 +66,7 @@ resource "aws_lb" "alb" {
 
   tags = {
     Name    = "${var.infra_environment}-alb"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -87,6 +87,6 @@ resource "aws_lb_listener" "api_requests" {
 
   tags = {
     Name    = "${var.infra_environment}-alb-listener-api-requests"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
