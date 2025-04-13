@@ -16,7 +16,7 @@ provider "aws" {
     }
   }
 
-  ignore_tags {
-    keys = ["Created"]
-  }
+  # ignore_tags {
+  #   keys = ["Created"]
+  # }
 }

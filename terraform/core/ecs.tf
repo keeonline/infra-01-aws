@@ -3,7 +3,7 @@ resource "aws_ecs_cluster" "applications" {
 
   tags = {
     Name    = "${var.infra_environment}-ecs-cluster-applications"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 
 }

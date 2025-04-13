@@ -15,7 +15,7 @@ resource "aws_iam_role" "ecs_task_exec" {
 
   tags = {
     Name        = "${var.infra_environment}-iam-role-ecs-task-exec"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_iam_role" "ecs_task" {
 
   tags = {
     Name        = "${var.infra_environment}-iam-role-ecs-task"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 

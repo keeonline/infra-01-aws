@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
 
   tags = {
     Name    = "${var.infra_environment}-vpc"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -44,7 +44,7 @@ resource "aws_internet_gateway" "igw" {
 
   tags = {
     Name    = "${var.infra_environment}-igw"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -80,7 +80,7 @@ resource "aws_eip" "ngw" {
 
   tags = {
     Name    = "${var.infra_environment}-eip-ngw-${count.index}"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
@@ -91,7 +91,7 @@ resource "aws_nat_gateway" "ngw" {
 
   tags = {
     Name    = "${var.infra_environment}-ngw-${count.index}"
-    Created = "${timestamp()}"
+    # Created = "${timestamp()}"
   }
 }
 
