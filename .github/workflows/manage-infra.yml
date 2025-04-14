@@ -34,7 +34,7 @@ jobs:
 
       - name: show
         run: |
-          echo "artefact_version=${{steps.infra_version.outputs.version}}"
+          echo "infra_version=${{steps.infra_version.outputs.version}}"
 
       - name: terraform action
         uses: keeonline/github-actions/terraform-action@versions
