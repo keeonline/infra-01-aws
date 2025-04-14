@@ -30,14 +30,14 @@ jobs:
     steps:
       - name: Get the artefact version
         id: infra_version
-        uses: keeonline/github-actions/artefact-version-by-ref-type@versions
+        uses: keeonline/github-actions/artefact-version-by-ref-type@v0.0.8
 
       - name: show
         run: |
           echo "infra_version=${{steps.infra_version.outputs.version}}"
 
       - name: terraform action
-        uses: keeonline/github-actions/terraform-action@versions
+        uses: keeonline/github-actions/terraform-action@v0.0.8
         env:
           TF_VAR_infra_environment: ${{inputs.environment}}
           TF_VAR_infra_version: ${{steps.infra_version.outputs.version}}
