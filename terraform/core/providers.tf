@@ -12,7 +12,7 @@ provider "aws" {
     tags = {
       Environment = "${var.infra_environment}"
       Category    = "${var.resource_category}"
-      # Version     = "${var.infra_version}"
+      Version     = "${var.infra_version}"
     }
   }
 

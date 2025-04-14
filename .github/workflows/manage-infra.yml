@@ -29,18 +29,18 @@ jobs:
       id-token: write
     steps:
       - name: Get the artefact version
-        id: artefact_version
+        id: infra_version
         uses: keeonline/github-actions/artefact-version-by-ref-type@versions
 
       - name: show
         run: |
-          echo "artefact_version=${{steps.artefact_version.outputs.version}}"
+          echo "infra_version=${{steps.infra_version.outputs.version}}"
 
       - name: terraform action
-        uses: keeonline/github-actions/terraform-action@v0.0.7
+        uses: keeonline/github-actions/terraform-action@versions
         env:
           TF_VAR_infra_environment: ${{inputs.environment}}
-          TF_VAR_infra_version: ${{steps.artefact_version.outputs.version}}
+          TF_VAR_infra_version: ${{steps.infra_version.outputs.version}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
