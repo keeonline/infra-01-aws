@@ -21,6 +21,7 @@ resource "aws_subnet" "public" {
 
   tags = {
     Name    = "${var.infra_environment}-subnet-public-${count.index}"
+    Public = "yes"
     # Created = "${timestamp()}"
   }
 }
@@ -33,6 +34,7 @@ resource "aws_subnet" "private" {
 
   tags = {
     Name    = "${var.infra_environment}-subnet-private-${count.index}"
+    Public = "no"
     # Created = "${timestamp()}"
   }
 }
