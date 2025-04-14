@@ -22,7 +22,7 @@ jobs:
 
         - name: Get the artefact version
           id: artefact_version
-          uses: keeonline/github-actions/artefact-version@v0.0.7
+          uses: keeonline/github-actions/artefact-version-for-branch@vversions
             
         - name: Tag the repository with the semantic version
           uses: actions/github-script@v7

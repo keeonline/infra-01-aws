@@ -37,7 +37,7 @@ jobs:
           echo "artefact_version=${{steps.artefact_version.outputs.version}}"
 
       - name: terraform action
-        uses: keeonline/github-actions/terraform-action@v0.0.7
+        uses: keeonline/github-actions/terraform-action@versions
         env:
           TF_VAR_infra_environment: ${{inputs.environment}}
           TF_VAR_infra_version: ${{steps.artefact_version.outputs.version}}
