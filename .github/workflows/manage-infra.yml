@@ -45,9 +45,9 @@ jobs:
         run: |
           if [ "${{ github.ref_type }}" == "branch" ]
           then
-            echo "${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
+            echo "value=${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
           else
-            echo "${{github.ref_name}}" >> $GITHUB_OUTPUT
+            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
           fi
 
       # - name: terraform action
