@@ -28,19 +28,32 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - name: Get the artefact version
-        id: infra_version
-        uses: keeonline/github-actions/artefact-version-by-ref-type@v0.0.8
+      - name: Get the artefact version values
+        id: versions
+        uses: keeonline/github-actions/artefact-version@v0.0.9
 
-      - name: show
+      - name: show versions
         run: |
-          echo "infra_version=${{steps.infra_version.outputs.version}}"
+          echo "branch-version=${{steps.versions.outputs.branch}}"
+          echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
+          echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
+
+      - name: Set the infra version
+        id: infra_version
+        shell: bash
+        run: |
+          if [ "${{ github.ref_type }}" == "branch" ]
+          then
+            echo "value=${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
+          else
+            echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
+          fi
 
       - name: terraform action
-        uses: keeonline/github-actions/terraform-action@v0.0.8
+        uses: keeonline/github-actions/terraform-apply@v0.0.9
         env:
           TF_VAR_infra_environment: ${{inputs.environment}}
-          TF_VAR_infra_version: ${{steps.infra_version.outputs.version}}
+          TF_VAR_infra_version: ${{steps.infra_version.outputs.value}}
         with:
           aws_account_id: ${{secrets.AWS_ACCOUNT_ID}}
           aws_region: ${{secrets.AWS_REGION}}
