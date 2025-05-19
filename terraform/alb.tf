@@ -4,7 +4,7 @@ resource "aws_security_group" "alb" {
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name    = "${var.infra_environment}-sg-alb"
+    Name = "${var.infra_environment}-sg-alb"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   to_port           = 80
 
   tags = {
-    Name    = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
+    Name = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name    = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
+    Name = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
   }
 }
 
@@ -47,7 +47,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name    = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
+    Name = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_lb" "alb" {
   security_groups    = [aws_security_group.alb.id]
 
   tags = {
-    Name    = "${var.infra_environment}-alb"
+    Name = "${var.infra_environment}-alb"
   }
 }
 
@@ -80,6 +80,6 @@ resource "aws_lb_listener" "api_requests" {
   }
 
   tags = {
-    Name    = "${var.infra_environment}-alb-listener-api-requests"
+    Name = "${var.infra_environment}-alb-listener-api-requests"
   }
 }

@@ -4,7 +4,7 @@ resource "aws_eip" "ngw" {
   domain = "vpc"
 
   tags = {
-    Name    = "${var.infra_environment}-eip-ngw-${count.index}"
+    Name = "${var.infra_environment}-eip-ngw-${count.index}"
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_nat_gateway" "ngw" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name    = "${var.infra_environment}-ngw-${count.index}"
+    Name = "${var.infra_environment}-ngw-${count.index}"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name    = "${var.infra_environment}-rt-private-${count.index}"
+    Name = "${var.infra_environment}-rt-private-${count.index}"
   }
 }
 

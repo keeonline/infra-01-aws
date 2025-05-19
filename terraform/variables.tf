@@ -7,11 +7,11 @@ variable "infra_version" {
 }
 
 variable "resource_category" {
-  type = string
+  type    = string
   default = "infrastructure"
 }
 
 variable "az_use_count" {
-  type = number
+  type    = number
   default = 2
 }
