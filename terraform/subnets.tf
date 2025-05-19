@@ -35,6 +35,3 @@ resource "aws_subnet" "private" {
     Visibility = "private"
   }
 }
-
-
-
