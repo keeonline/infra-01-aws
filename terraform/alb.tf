@@ -4,23 +4,21 @@ resource "aws_security_group" "alb" {
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name    = "${var.infra_environment}-sg-alb"
-    # Created = "${timestamp()}"
+    Name = "${var.infra_environment}-sg-alb"
   }
 }
 
-# Add ALB INGRESS rule so it can receive HTTP trafic over port 18080 from the internet
+# Add ALB INGRESS rule so it can receive HTTP trafic over well-known port number from the internet
 resource "aws_vpc_security_group_ingress_rule" "alb_ingress_services" {
   security_group_id = aws_security_group.alb.id
   description       = "Ingress rule to allow inbound HTTP traffic to the service ALB"
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 18080
+  from_port         = 80
   ip_protocol       = "tcp"
-  to_port           = 18080
+  to_port           = 80
 
   tags = {
-    Name    = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
-    # Created = "${timestamp()}"
+    Name = "${var.infra_environment}-sg-rule-alb-public-http-ingress"
   }
 }
 
@@ -35,8 +33,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_services" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name    = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
-    # Created = "${timestamp()}"
+    Name = "${var.infra_environment}-sg-alb-egress-services-${count.index}"
   }
 }
 
@@ -50,11 +47,9 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_management" {
   ip_protocol       = "tcp"
 
   tags = {
-    Name    = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
-    # Created = "${timestamp()}"
+    Name = "${var.infra_environment}-sg-alb-egress-management-${count.index}"
   }
 }
-
 
 
 resource "aws_lb" "alb" {
@@ -65,14 +60,13 @@ resource "aws_lb" "alb" {
   security_groups    = [aws_security_group.alb.id]
 
   tags = {
-    Name    = "${var.infra_environment}-alb"
-    # Created = "${timestamp()}"
+    Name = "${var.infra_environment}-alb"
   }
 }
 
 resource "aws_lb_listener" "api_requests" {
   load_balancer_arn = aws_lb.alb.arn
-  port              = "18080"
+  port              = "80"
   protocol          = "HTTP"
 
   default_action {
@@ -86,7 +80,6 @@ resource "aws_lb_listener" "api_requests" {
   }
 
   tags = {
-    Name    = "${var.infra_environment}-alb-listener-api-requests"
-    # Created = "${timestamp()}"
+    Name = "${var.infra_environment}-alb-listener-api-requests"
   }
 }

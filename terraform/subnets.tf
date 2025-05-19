@@ -1,6 +1,9 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 # Create the public subnets in the main VPC
 resource "aws_subnet" "public" {
-  # count             = length(data.aws_availability_zones.available.names)
   count             = var.az_use_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, (0 + (16 * count.index)))
@@ -22,7 +25,6 @@ resource "aws_route_table_association" "public" {
 
 # Create the private subnets in the main VPC
 resource "aws_subnet" "private" {
-  # count             = length(data.aws_availability_zones.available.names)
   count             = var.az_use_count
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, (48 + (16 * count.index)))
@@ -33,6 +35,3 @@ resource "aws_subnet" "private" {
     Visibility = "private"
   }
 }
-
-
-
