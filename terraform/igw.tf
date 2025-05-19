@@ -4,7 +4,6 @@ resource "aws_internet_gateway" "igw" {
 
   tags = {
     Name    = "${var.infra_environment}-igw"
-    # Created = "${timestamp()}"
   }
 }
 
