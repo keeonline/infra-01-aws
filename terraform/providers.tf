@@ -13,6 +13,9 @@ provider "aws" {
       Environment = "${var.infra_environment}"
       Category    = "${var.resource_category}"
       Version     = "${var.infra_version}"
+      ManagedBy   = "IaC"
+      # TODO:
+      # IacRepository = ...
     }
   }
 }

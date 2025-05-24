@@ -30,13 +30,13 @@ jobs:
     steps:
       - name: Get the artefact version values
         id: versions
-        uses: keeonline/github-actions/artefact-version@v0.0.9
+        uses: keeonline/github-actions/artefact-version@v0.0.10
 
       - name: show versions
         run: |
-          echo "branch-version=${{steps.versions.outputs.branch}}"
           echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
           echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
+          echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
 
       - name: Set the infra version
         id: infra_version
@@ -44,13 +44,13 @@ jobs:
         run: |
           if [ "${{ github.ref_type }}" == "branch" ]
           then
-            echo "value=${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
+            echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
           else
             echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
           fi
 
       - name: terraform action
-        uses: keeonline/github-actions/terraform-apply@v0.0.9
+        uses: keeonline/github-actions/terraform-apply@v0.0.10
         env:
           TF_VAR_infra_environment: ${{inputs.environment}}
           TF_VAR_infra_version: ${{steps.infra_version.outputs.value}}
