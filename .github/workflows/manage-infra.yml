@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Get the artefact version values
         id: versions
-        uses: keeonline/github-actions/artefact-version@v0.0.9
+        uses: keeonline/github-actions/artefact-version@karate
 
       - name: show versions
         run: |
@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: terraform action
-        uses: keeonline/github-actions/terraform-apply@v0.0.9
+        uses: keeonline/github-actions/terraform-apply@karate
         env:
           TF_VAR_infra_environment: ${{inputs.environment}}
           TF_VAR_infra_version: ${{steps.infra_version.outputs.value}}
