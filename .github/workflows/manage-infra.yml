@@ -34,9 +34,9 @@ jobs:
 
       - name: show versions
         run: |
-          echo "branch-version=${{steps.versions.outputs.branch}}"
           echo "current-semantic=${{steps.versions.outputs.current_semantic}}"
           echo "next-semantic=${{steps.versions.outputs.next_semantic}}"
+          echo "branch-semantic=${{steps.versions.outputs.branch_semantic}}"
 
       - name: Set the infra version
         id: infra_version
@@ -44,7 +44,7 @@ jobs:
         run: |
           if [ "${{ github.ref_type }}" == "branch" ]
           then
-            echo "value=${{steps.versions.outputs.branch}}" >> $GITHUB_OUTPUT
+            echo "value=${{steps.versions.outputs.branch_semantic}}" >> $GITHUB_OUTPUT
           else
             echo "value=${{github.ref_name}}" >> $GITHUB_OUTPUT
           fi
